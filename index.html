@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mood Playground | ประเมินอารมณ์ประจำวัน</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="theme-start">
+    <div class="site-shell">
+      <header class="topbar">
+        <a class="brand" href="#home" aria-label="Mood Playground">
+          <span class="brand-mark">มู้ด</span>
+          <span>Mood Playground</span>
+        </a>
+        <button class="ghost-button" type="button" data-open-admin>หลังบ้าน</button>
+      </header>
+
+      <main id="home">
+        <section class="hero">
+          <div class="hero-copy">
+            <p class="eyebrow">แบบเช็กอารมณ์พนักงานรายวัน</p>
+            <h1>วันนี้ใจเราเด้งดึ๋ง แบนแต๊ดแต๋ หรืออยากนอนในถ้วยบะหมี่?</h1>
+            <p class="lead">
+              ตอบ 10 ข้อแบบไม่ต้องเกร็ง เหมือนเล่นเกมพักเบรกสั้น ๆ แล้วเว็บจะเปลี่ยนสีตามมู้ดพร้อมคำแนะนำกวน ๆ ที่พอช่วยได้จริง
+            </p>
+            <div class="hero-actions">
+              <a class="primary-button" href="#quiz">เริ่มเล่นเลย</a>
+              <button class="soft-button" type="button" data-demo-result>สุ่มดูผลลัพธ์</button>
+            </div>
+          </div>
+          <div class="hero-art" aria-hidden="true">
+            <svg viewBox="0 0 520 520" role="img">
+              <defs>
+                <filter id="wiggle-shadow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#332652" flood-opacity=".18" />
+                </filter>
+              </defs>
+              <path class="squiggle one" d="M66 116c46-38 83 24 128-8 45-31 74-42 116-8 56 45 100 2 142 34" />
+              <path class="squiggle two" d="M84 404c48 23 89-13 133 10 58 31 102-9 157 10 26 9 50 18 74 2" />
+              <circle class="bubble b1" cx="86" cy="268" r="28" />
+              <circle class="bubble b2" cx="442" cy="244" r="42" />
+              <circle class="bubble b3" cx="380" cy="92" r="18" />
+              <g class="mascot-card" filter="url(#wiggle-shadow)">
+                <path d="M158 210c0-74 43-126 107-126 77 0 123 54 123 129 0 73-44 133-119 133-71 0-111-61-111-136Z" />
+                <path class="face-patch" d="M197 209c0-43 28-74 69-74 49 0 79 31 79 76 0 43-29 76-76 76-45 0-72-34-72-78Z" />
+                <circle class="eye" cx="246" cy="205" r="9" />
+                <circle class="eye" cx="300" cy="205" r="9" />
+                <path class="mouth" d="M250 243c19 17 43 17 60 0" />
+                <path class="arm left" d="M169 250c-35 3-54 18-62 45" />
+                <path class="arm right" d="M380 251c37 1 58 15 70 40" />
+                <path class="leg left" d="M235 340c-10 32-27 48-52 50" />
+                <path class="leg right" d="M305 339c7 31 25 49 51 51" />
+              </g>
+              <g class="doodle-stars">
+                <path d="M113 169l13 12 16-7-7 17 12 13-18-1-9 15-4-17-17-5 15-9Z" />
+                <path d="M403 350l9 9 12-5-5 12 9 10-13-1-7 11-3-13-12-3 11-7Z" />
+              </g>
+            </svg>
+          </div>
+        </section>
+
+        <section class="quiz-zone" id="quiz">
+          <div class="section-heading">
+            <p class="eyebrow">Step 1</p>
+            <h2>แนะนำตัวกับเครื่องวัดใจจิ๋ว</h2>
+          </div>
+
+          <form class="quiz-card" id="moodForm">
+            <div class="profile-grid">
+              <label>
+                ชื่อเล่น / ชื่อที่อยากให้เรียก
+                <input id="employeeName" name="employeeName" type="text" placeholder="เช่น แพรว, บอส, คนง่วง" required />
+              </label>
+              <label>
+                อายุ
+                <input id="employeeAge" name="employeeAge" type="number" min="15" max="80" placeholder="เช่น 28" required />
+              </label>
+            </div>
+
+            <div class="questions" id="questions"></div>
+
+            <div class="form-footer">
+              <p>ไม่มีคำตอบผิด มีแต่คำตอบที่ใจแอบส่งสัญญาณมาให้ฟังนิดนึง</p>
+              <button class="primary-button" type="submit">ดูมู้ดวันนี้</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="result-panel is-hidden" id="resultPanel" aria-live="polite">
+          <div class="result-visual">
+            <div class="result-blob" id="resultEmoji">✨</div>
+            <div class="meter">
+              <span id="meterFill"></span>
+            </div>
+          </div>
+          <div>
+            <p class="eyebrow">ผลประเมินวันนี้</p>
+            <h2 id="resultTitle">พร้อมดูผลหรือยัง</h2>
+            <p id="resultText"></p>
+            <ul class="tips" id="tipsList"></ul>
+            <div class="result-actions">
+              <button class="soft-button" type="button" data-reset>เล่นอีกรอบ</button>
+              <button class="ghost-button" type="button" data-open-admin>ดูหลังบ้าน</button>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <dialog class="admin-dialog" id="adminDialog">
+      <div class="admin-header">
+        <div>
+          <p class="eyebrow">Back Office</p>
+          <h2>ห้องส่องมู้ดทีม</h2>
+        </div>
+        <button class="icon-button" type="button" data-close-admin aria-label="ปิด">×</button>
+      </div>
+
+      <div class="pin-gate" id="pinGate">
+        <p>ใส่รหัสหลังบ้าน ค่าเริ่มต้นคือ <strong>1234</strong> เปลี่ยนได้ในไฟล์ <code>app.js</code></p>
+        <div class="pin-row">
+          <input id="adminPin" type="password" inputmode="numeric" placeholder="รหัส" />
+          <button class="primary-button" type="button" data-unlock-admin>เข้า</button>
+        </div>
+        <p class="error-text" id="pinError"></p>
+      </div>
+
+      <div class="admin-content is-hidden" id="adminContent">
+        <div class="stats-grid" id="statsGrid"></div>
+        <div class="admin-tools">
+          <input id="searchInput" type="search" placeholder="ค้นหาชื่อหรือระดับมู้ด" />
+          <button class="soft-button" type="button" data-export>Export CSV</button>
+          <button class="danger-button" type="button" data-clear>ล้างข้อมูล</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>เวลา</th>
+                <th>ชื่อ</th>
+                <th>อายุ</th>
+                <th>คะแนน</th>
+                <th>ระดับ</th>
+              </tr>
+            </thead>
+            <tbody id="resultsTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </dialog>
+
+    <script src="app.js"></script>
+  </body>
+</html>
