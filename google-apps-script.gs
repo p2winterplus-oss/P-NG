@@ -1,7 +1,8 @@
+const SPREADSHEET_ID = "1bJNBiiy8S5u_F2X3L6YTug5LvxtKU9f0h4qxx55xMe8";
 const SHEET_NAME = "Responses";
 
 function doPost(e) {
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
+  const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(SHEET_NAME);
   const payload = JSON.parse(e.postData.contents || "{}");
   const answers = Array.isArray(payload.answers) ? payload.answers : [];
 

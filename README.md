@@ -16,7 +16,7 @@
 
 สร้างชีตกลางไว้แล้วที่:
 
-https://docs.google.com/spreadsheets/d/14Wuc7-6WldiyCyWt_iidjLfyrSipSqG2tyhb-rjMoDc/edit
+https://docs.google.com/spreadsheets/d/1bJNBiiy8S5u_F2X3L6YTug5LvxtKU9f0h4qxx55xMe8/edit
 
 วิธีเชื่อมเว็บให้ส่งข้อมูลเข้าชีต:
 
