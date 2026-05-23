@@ -1,5 +1,6 @@
 const ADMIN_PIN = "1234";
 const STORAGE_KEY = "mood-playground-results";
+const SHEET_WEB_APP_URL = "";
 
 const questions = [
   {
@@ -184,6 +185,7 @@ const pinError = document.querySelector("#pinError");
 const resultsTable = document.querySelector("#resultsTable");
 const statsGrid = document.querySelector("#statsGrid");
 const searchInput = document.querySelector("#searchInput");
+const saveStatus = document.querySelector("#saveStatus");
 
 function renderQuestions() {
   questionsEl.innerHTML = questions
@@ -222,6 +224,10 @@ function saveResults(results) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(results));
 }
 
+function setSaveStatus(message) {
+  saveStatus.textContent = message;
+}
+
 function getLevel(score) {
   return levels.find((level) => score <= level.max) || levels.at(-1);
 }
@@ -242,7 +248,33 @@ function showResult(record) {
   resultPanel.scrollIntoView({ behavior: "smooth", block: "center" });
 }
 
-function handleSubmit(event) {
+async function submitToSheet(record) {
+  if (!SHEET_WEB_APP_URL) {
+    return { ok: false, skipped: true };
+  }
+
+  try {
+    const response = await fetch(SHEET_WEB_APP_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: {
+        "Content-Type": "text/plain;charset=utf-8"
+      },
+      body: JSON.stringify({
+        ...record,
+        userAgent: navigator.userAgent,
+        source: location.href
+      })
+    });
+
+    return { ok: true, response };
+  } catch (error) {
+    console.warn("Sheet submit failed", error);
+    return { ok: false, error };
+  }
+}
+
+async function handleSubmit(event) {
   event.preventDefault();
   const data = new FormData(form);
   const name = String(data.get("employeeName")).trim();
@@ -264,6 +296,16 @@ function handleSubmit(event) {
   saveResults([record, ...getResults()]);
   showResult(record);
   renderAdmin();
+  setSaveStatus("กำลังส่งข้อมูลเข้าชีตกลาง...");
+
+  const sheetResult = await submitToSheet(record);
+  if (sheetResult.ok) {
+    setSaveStatus("บันทึกลงชีตกลางแล้ว และมีสำเนาในเครื่องนี้ด้วย");
+  } else if (sheetResult.skipped) {
+    setSaveStatus("บันทึกในเครื่องนี้แล้ว ถ้าจะให้เข้าชีตกลาง ให้ใส่ Apps Script URL ใน app.js");
+  } else {
+    setSaveStatus("บันทึกในเครื่องนี้แล้ว แต่ส่งเข้าชีตกลางไม่สำเร็จ ลองเช็ก Apps Script URL");
+  }
 }
 
 function formatDate(dateString) {
